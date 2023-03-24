@@ -3,6 +3,7 @@ package com.example.hamgaja.users.controller;
 import com.example.hamgaja.jwt.JwtUtil;
 import com.example.hamgaja.users.dto.LoginRequestDto;
 import com.example.hamgaja.users.dto.SignupRequestDto;
+import com.example.hamgaja.users.dto.TermsRequestDto;
 import com.example.hamgaja.users.exception.CustomErrorCode;
 import com.example.hamgaja.users.exception.CustomException;
 import com.example.hamgaja.users.exception.ResponseMessage;
@@ -26,12 +27,13 @@ public class UserController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
-    @PostMapping("/signup")
-    public ResponseEntity signup(@Valid @RequestBody SignupRequestDto signupRequestDto, BindingResult bindingResult) {
+    @PostMapping("/users/signup")
+    public ResponseEntity signup(@Valid @RequestBody SignupRequestDto signupRequestDto, TermsRequestDto termsRequestDto,
+                                 BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new CustomException(CustomErrorCode.NOT_PROPER_INPUTFORM);
         }
-        return ResponseMessage.SuccessResponse(userService.signup(signupRequestDto) , "");
+        return ResponseMessage.SuccessResponse(userService.signup(signupRequestDto, termsRequestDto) , "");
     }
 
 //    @PostMapping("/login")
