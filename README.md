@@ -53,5 +53,5 @@ ex) git commit -m "docs : README.md 규칙 추가"
 
 #### test : 테스트 코드 추가/수정
 
-#### release : 버전 릴리즈.
+#### release : 버전 릴리즈
 
