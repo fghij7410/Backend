@@ -16,7 +16,7 @@
 
 ### 4. CI / CD
 
- - Github Actions
+ - GitHub Actions
  - Amazon CodeDeploy
 
 ## Architecture
