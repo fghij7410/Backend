@@ -1,4 +1,23 @@
 ## 기술적 의사결정
+ 
+### 1. 배포환경
+ 
+ - AWS EC2
+ - Ubuntu
+
+### 2. DB
+ 
+ - MySQL
+
+### 3. 보안
+
+ - Spring Security
+ - JWT
+
+### 4. CI / CD
+
+ - Github Actions
+ - Amazon CodeDeploy
 
 ## Architecture
 
