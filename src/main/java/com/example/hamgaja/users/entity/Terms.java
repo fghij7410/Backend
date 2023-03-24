@@ -1,5 +1,6 @@
 package com.example.hamgaja.users.entity;
 
+import com.example.hamgaja.users.dto.TermsRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,11 +15,17 @@ public class Terms {
     private Long id;
 
     @Column(nullable = false)
-    private String privacy_therm;
+    private boolean privacy_term;
 
     @Column(nullable = false)
-    private String markething_therm;
+    private boolean marketing_term;
 
     @Column(nullable = false)
-    private String gps_therm;
+    private boolean gps_term;
+
+    public Terms(TermsRequestDto requestDto) {
+        this.privacy_term = requestDto.isPrivacy_term();
+        this.marketing_term = requestDto.isMarketing_term();
+        this.gps_term = requestDto.isGps_term();
+    }
 }

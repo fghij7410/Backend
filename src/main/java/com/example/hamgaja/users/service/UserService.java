@@ -2,11 +2,13 @@ package com.example.hamgaja.users.service;
 
 import com.example.hamgaja.users.dto.LoginRequestDto;
 import com.example.hamgaja.users.dto.SignupRequestDto;
+import com.example.hamgaja.users.dto.TermsRequestDto;
 import com.example.hamgaja.users.entity.Terms;
 import com.example.hamgaja.users.entity.User;
 import com.example.hamgaja.users.entity.UserRoleEnum;
 import com.example.hamgaja.users.exception.CustomErrorCode;
 import com.example.hamgaja.users.exception.CustomException;
+import com.example.hamgaja.users.repository.TermRepository;
 import com.example.hamgaja.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,10 +23,12 @@ import java.util.Map;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final TermRepository termRepository;
     private final PasswordEncoder passwordEncoder;
 //    private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
+
     @Transactional
-    public String signup(SignupRequestDto signupRequestDto) {
+    public String signup(SignupRequestDto signupRequestDto, TermsRequestDto termsRequestDto) {
         // 회원아이디 중복 확인
         boolean found = userRepository.findByEmail(signupRequestDto.getEmail()).isPresent();
         if (found) {
@@ -37,15 +41,13 @@ public class UserService {
             throw new CustomException(CustomErrorCode.DUPLICATE_NICKNAME);
         }
 
-        // 권한 부여 (사업자등록번호가 null이면 USER)
+        // 권한 부여
         UserRoleEnum role = UserRoleEnum.USER;
-        if (signupRequestDto.getBusiness_number() != null) {
-            role = UserRoleEnum.BUSINESS;
-        }
 
-        Terms terms = new Terms();  //약관
+        Terms terms = new Terms(termsRequestDto);  //약관
+        Terms SaveTerms = termRepository.save(terms);
 
-        User user = new User(signupRequestDto, passwordEncoder.encode(signupRequestDto.getPassword()), terms );
+        User user = new User(signupRequestDto, passwordEncoder.encode(signupRequestDto.getPassword()), role, SaveTerms );
         userRepository.save(user);
 
         return "회원가입 성공";

@@ -23,22 +23,19 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(unique = true)
-    private String business_number;
-
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
     @OneToOne
+    @JoinColumn(name = "terms_id")
     private Terms terms;
 
-    public User(SignupRequestDto signupRequestDto, String password, Terms terms) {
+    public User(SignupRequestDto signupRequestDto, String password, UserRoleEnum role, Terms terms) {
         this.email = signupRequestDto.getEmail();
         this.password = password;   //서비스로직에서 패스워드인코더 사용
         this.username = signupRequestDto.getUsername();
-        this.business_number = signupRequestDto.getBusiness_number();
-        this.role = UserRoleEnum.USER;
+        this.role = role;
         this.terms = terms;
     }
 }
