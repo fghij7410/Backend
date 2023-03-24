@@ -1,4 +1,4 @@
 package com.example.hamgaja.products.exception;
 
-public class exception {
+public class ProductException {
 }
