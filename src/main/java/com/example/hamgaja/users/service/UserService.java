@@ -53,29 +53,29 @@ public class UserService {
         return "회원가입 성공";
     }
 
-//    @Transactional(readOnly = true)
-//    public Map<String, String> login(LoginRequestDto loginRequestDto) {
-//        // 사용자 확인
-//        User user = userRepository.findByUsername(loginRequestDto.getUsername()).orElseThrow(
-//                () -> new CustomException(CustomErrorCode.USER_NOT_FOUND)
-//        );
-//        // 비밀번호 확인
-//        if(!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())){
-//            throw  new CustomException(CustomErrorCode.NOT_PROPER_PASSWORD);
-//        }
-//
-//        Map<String, String> result = new HashMap<>();
-//        result.put("username", user.getUsername());
-//        result.put("nickname", user.getNickname());
-//
-//        return result;
-//    }
+    @Transactional(readOnly = true)
+    public Map<String, String> login(LoginRequestDto loginRequestDto) {
+        // 사용자 확인
+        User user = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(
+                () -> new CustomException(CustomErrorCode.USER_NOT_FOUND)
+        );
+        // 비밀번호 확인
+        if(!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())){
+            throw  new CustomException(CustomErrorCode.NOT_PROPER_PASSWORD);
+        }
 
-//    @Transactional
-//    public String checkUsername(String username) {
-//        if (userRepository.existsUserByUsername(username)) {
-//            throw new CustomException(CustomErrorCode.DUPLICATE_USER);
-//        }
-//        return "사용가능한 아이디입니다.";
-//    }
+        Map<String, String> result = new HashMap<>();
+        result.put("username", user.getUsername());
+        result.put("email", user.getEmail());
+
+        return result;
+    }
+
+    @Transactional
+    public String checkUsername(String username) {
+        if (userRepository.existsUserByUsername(username)) {
+            throw new CustomException(CustomErrorCode.DUPLICATE_USER);
+        }
+        return "사용가능한 아이디입니다.";
+    }
 }
