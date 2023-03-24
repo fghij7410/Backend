@@ -4,6 +4,7 @@ import com.example.hamgaja.jwt.JwtUtil;
 import com.example.hamgaja.users.dto.LoginRequestDto;
 import com.example.hamgaja.users.dto.SignupRequestDto;
 import com.example.hamgaja.users.dto.TermsRequestDto;
+import com.example.hamgaja.users.entity.UserRoleEnum;
 import com.example.hamgaja.users.exception.CustomErrorCode;
 import com.example.hamgaja.users.exception.CustomException;
 import com.example.hamgaja.users.exception.ResponseMessage;
@@ -36,15 +37,16 @@ public class UserController {
         return ResponseMessage.SuccessResponse(userService.signup(signupRequestDto, termsRequestDto) , "");
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-//        Map<String, String> user = userService.login(loginRequestDto);
-////        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.get("username"), user.get("username")));
-//        return ResponseMessage.SuccessResponse("로그인 성공!", "");
-//    }
-//
-//    @PostMapping("/check/username")
-//    public ResponseEntity checkUsername(@RequestBody HashMap<String, String> username) {
-//        return ResponseMessage.SuccessResponse(userService.checkUsername(username.get("username")), "");
-//    }
+    @PostMapping("/users/login")
+    public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
+        Map<String, String> user = userService.login(loginRequestDto);
+        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.get("username"), user.get("email")));
+        return ResponseMessage.SuccessResponse("로그인 성공!", "");
+    }
+
+    //
+    @PostMapping("/users/check/username")
+    public ResponseEntity checkEmail(@RequestBody HashMap<String, String> username) {
+        return ResponseMessage.SuccessResponse(userService.checkUsername(username.get("username")), "");
+    }
 }

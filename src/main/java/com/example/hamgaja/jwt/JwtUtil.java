@@ -24,7 +24,7 @@ import java.util.Date;
 @Slf4j
 public class JwtUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";     //http요청 응답 보낼 때, 헤더값 key에 해당.
-    public static final String AUTHORIZATION_KEY = "role";
+    public static final String AUTHORIZATION_KEY = "email";
     private static final String BEARER_PREFIX = "Bearer ";
     private static final long TOKEN_TIME = 60 * 60 * 1000L;
 
@@ -52,13 +52,13 @@ public class JwtUtil {
     }
 
     // 토큰 생성
-    public String createToken(String username, UserRoleEnum role) {
+    public String createToken(String username, String email) {
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username)
-                        .claim(AUTHORIZATION_KEY, role)
+                        .claim(AUTHORIZATION_KEY, email)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)
