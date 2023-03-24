@@ -33,12 +33,12 @@ public class User {
     @OneToOne
     private Terms terms;
 
-    public User(SignupRequestDto signupRequestDto, String password, UserRoleEnum role, Terms terms) {
+    public User(SignupRequestDto signupRequestDto, String password, Terms terms) {
         this.email = signupRequestDto.getEmail();
         this.password = password;   //서비스로직에서 패스워드인코더 사용
         this.username = signupRequestDto.getUsername();
         this.business_number = signupRequestDto.getBusiness_number();
-        this.role = role;
+        this.role = UserRoleEnum.USER;
         this.terms = terms;
     }
 }

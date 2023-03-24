@@ -45,7 +45,7 @@ public class UserService {
 
         Terms terms = new Terms();  //약관
 
-        User user = new User(signupRequestDto, passwordEncoder.encode(signupRequestDto.getPassword()), role, terms );
+        User user = new User(signupRequestDto, passwordEncoder.encode(signupRequestDto.getPassword()), terms );
         userRepository.save(user);
 
         return "회원가입 성공";
