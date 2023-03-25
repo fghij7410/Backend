@@ -1,4 +1,10 @@
 package com.example.hamgaja.products.exception;
 
-public class ProductException {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public class ProductException extends RuntimeException{
+    private final ProductErrorCode errorCode;
 }
