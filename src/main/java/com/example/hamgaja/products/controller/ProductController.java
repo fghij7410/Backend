@@ -16,27 +16,27 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping
+    @PostMapping("/products")
     public ResponseEntity addProduct(HttpServletRequest request, ProductRequestDto productRequestDto){
         return null;
     }
 
-    @GetMapping
+    @GetMapping("/products")
     public ResponseEntity getAllProduct(){
         return null;
     }
 
-    @PatchMapping
+    @PatchMapping("/products/{productId}")
     public ResponseEntity modifyProduct(){
         return null;
     }
 
-    @DeleteMapping
+    @DeleteMapping("/products/{productId}")
     public ResponseEntity deleteProduct(){
         return null;
     }
 
-    @GetMapping
+    @GetMapping("/products/{productId}")
     public ResponseEntity getProduct(){
         return null;
     }
