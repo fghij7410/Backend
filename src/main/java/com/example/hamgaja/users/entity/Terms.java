@@ -15,17 +15,17 @@ public class Terms {
     private Long id;
 
     @Column(nullable = false)
-    private boolean privacy_term;
+    private boolean privacyTerm;
 
     @Column(nullable = false)
-    private boolean marketing_term;
+    private boolean marketingTerm;
 
     @Column(nullable = false)
-    private boolean gps_term;
+    private boolean gpsTerm;
 
     public Terms(TermsRequestDto requestDto) {
-        this.privacy_term = requestDto.isPrivacy_term();
-        this.marketing_term = requestDto.isMarketing_term();
-        this.gps_term = requestDto.isGps_term();
+        this.privacyTerm = requestDto.isPrivacyTerm();
+        this.marketingTerm = requestDto.isMarketingTerm();
+        this.gpsTerm = requestDto.isGpsTerm();
     }
 }

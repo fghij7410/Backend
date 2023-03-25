@@ -1,5 +1,6 @@
 package com.example.hamgaja.users.exception;
 
+import com.example.hamgaja.message.ResponseMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

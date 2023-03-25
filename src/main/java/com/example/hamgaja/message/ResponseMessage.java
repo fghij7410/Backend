@@ -1,5 +1,6 @@
-package com.example.hamgaja.users.exception;
+package com.example.hamgaja.message;
 
+import com.example.hamgaja.users.exception.CustomErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

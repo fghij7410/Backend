@@ -25,7 +25,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final TermRepository termRepository;
     private final PasswordEncoder passwordEncoder;
-//    private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     @Transactional
     public String signup(SignupRequestDto signupRequestDto, TermsRequestDto termsRequestDto) {
@@ -35,7 +34,7 @@ public class UserService {
             throw new CustomException(CustomErrorCode.DUPLICATE_USER);
         }
 
-        //닉네임 중복 확인
+        //닉네임 중복 확인 추후 제거예정
         found = userRepository.findByUsername(signupRequestDto.getUsername()).isPresent();
         if (found) {
             throw new CustomException(CustomErrorCode.DUPLICATE_NICKNAME);
@@ -44,10 +43,11 @@ public class UserService {
         // 권한 부여
         UserRoleEnum role = UserRoleEnum.USER;
 
-        Terms terms = new Terms(termsRequestDto);  //약관
-        Terms SaveTerms = termRepository.save(terms);
+        // 약관 처리
+        Terms terms = termRepository.save(new Terms(termsRequestDto));
 
-        User user = new User(signupRequestDto, passwordEncoder.encode(signupRequestDto.getPassword()), role, SaveTerms );
+        //
+        User user = new User(signupRequestDto, passwordEncoder.encode(signupRequestDto.getPassword()), role, terms );
         userRepository.save(user);
 
         return "회원가입 성공";
@@ -76,6 +76,6 @@ public class UserService {
         if (userRepository.existsUserByUsername(username)) {
             throw new CustomException(CustomErrorCode.DUPLICATE_USER);
         }
-        return "사용가능한 아이디입니다.";
+        return "사용가능한 닉네임입니다.";
     }
 }
