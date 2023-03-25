@@ -4,8 +4,8 @@ import com.example.hamgaja.jwt.JwtUtil;
 import com.example.hamgaja.users.dto.LoginRequestDto;
 import com.example.hamgaja.users.dto.SignupRequestDto;
 import com.example.hamgaja.users.dto.TermsRequestDto;
-import com.example.hamgaja.users.exception.CustomErrorCode;
-import com.example.hamgaja.users.exception.CustomException;
+import com.example.hamgaja.users.exception.UserErrorCode;
+import com.example.hamgaja.users.exception.UserException;
 import com.example.hamgaja.message.ResponseMessage;
 import com.example.hamgaja.users.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class UserController {
     public ResponseEntity signup(@Valid @RequestBody SignupRequestDto signupRequestDto, TermsRequestDto termsRequestDto,
                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new CustomException(CustomErrorCode.NOT_PROPER_INPUTFORM);
+            throw new UserException(UserErrorCode.NOT_PROPER_INPUTFORM);
         }
         return ResponseMessage.SuccessResponse(userService.signup(signupRequestDto, termsRequestDto) , "");
     }

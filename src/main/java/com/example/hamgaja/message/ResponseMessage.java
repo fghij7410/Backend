@@ -1,6 +1,6 @@
 package com.example.hamgaja.message;
 
-import com.example.hamgaja.users.exception.CustomErrorCode;
+import com.example.hamgaja.users.exception.UserErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +15,7 @@ public class ResponseMessage {
     private final int statusCode;
     private final Object data;
 
-    public static ResponseEntity ErrorResponse(CustomErrorCode errorCode) {
+    public static ResponseEntity ErrorResponse(UserErrorCode errorCode) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
                 .body(ResponseMessage.builder()
