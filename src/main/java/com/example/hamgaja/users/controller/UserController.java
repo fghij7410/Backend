@@ -4,10 +4,9 @@ import com.example.hamgaja.jwt.JwtUtil;
 import com.example.hamgaja.users.dto.LoginRequestDto;
 import com.example.hamgaja.users.dto.SignupRequestDto;
 import com.example.hamgaja.users.dto.TermsRequestDto;
-import com.example.hamgaja.users.entity.UserRoleEnum;
 import com.example.hamgaja.users.exception.CustomErrorCode;
 import com.example.hamgaja.users.exception.CustomException;
-import com.example.hamgaja.users.exception.ResponseMessage;
+import com.example.hamgaja.message.ResponseMessage;
 import com.example.hamgaja.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +27,7 @@ public class UserController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
+    //회원가입
     @PostMapping("/users/signup")
     public ResponseEntity signup(@Valid @RequestBody SignupRequestDto signupRequestDto, TermsRequestDto termsRequestDto,
                                  BindingResult bindingResult) {
@@ -37,6 +37,7 @@ public class UserController {
         return ResponseMessage.SuccessResponse(userService.signup(signupRequestDto, termsRequestDto) , "");
     }
 
+    // 로그인 토큰발급(이메일, 닉네임)
     @PostMapping("/users/login")
     public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         Map<String, String> user = userService.login(loginRequestDto);
@@ -44,7 +45,7 @@ public class UserController {
         return ResponseMessage.SuccessResponse("로그인 성공!", "");
     }
 
-    //
+    // 중복된 닉네임 검사
     @PostMapping("/users/check/username")
     public ResponseEntity checkEmail(@RequestBody HashMap<String, String> username) {
         return ResponseMessage.SuccessResponse(userService.checkUsername(username.get("username")), "");
