@@ -3,7 +3,7 @@
 ### 1. 배포환경
  
  - AWS EC2
- - Ubuntu 
+ - Ubuntu
 
 ### 2. DB
  
