@@ -18,7 +18,9 @@ public class ProductController {
 
     @PostMapping("/products")
     public ResponseEntity addProduct(HttpServletRequest request, ProductRequestDto productRequestDto){
-        return null;
+
+        return ResponseEntity.ok("응답성공");
+
     }
 
     @GetMapping("/products")
