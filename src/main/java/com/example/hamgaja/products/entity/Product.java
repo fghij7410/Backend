@@ -42,7 +42,7 @@ public class Product {
     //Product 의 위치
     @Column(nullable = false)
     private String address;
-    //위치 기반 시스템의 위치
+    //호텔 상세 주소
     @OneToOne
     @JoinColumn(name="location_id")
     private Location location;
