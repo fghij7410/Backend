@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 
 
 @RestController
-@RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
 
