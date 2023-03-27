@@ -41,7 +41,7 @@ public class UserService {
         }
 
         // 권한 부여
-        UserRoleEnum role = UserRoleEnum.USER;
+        UserRoleEnum role = UserRoleEnum.BUSINESS;
 
         // 약관 처리
         Terms terms = termRepository.save(new Terms(termsRequestDto));
