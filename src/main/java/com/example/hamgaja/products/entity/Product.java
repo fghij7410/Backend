@@ -1,6 +1,7 @@
 package com.example.hamgaja.products.entity;
 
 import com.example.hamgaja.products.dto.ProductRequestDto;
+import com.example.hamgaja.users.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,6 +46,10 @@ public class Product {
     @OneToOne
     @JoinColumn(name="location_id")
     private Location location;
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
 
     public void update(ProductRequestDto productRequestDto) {
         this.name = productRequestDto.getName();

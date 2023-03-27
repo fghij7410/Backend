@@ -1,5 +1,6 @@
 package com.example.hamgaja.users.entity;
 
+import com.example.hamgaja.products.entity.Product;
 import com.example.hamgaja.users.dto.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,8 @@ public class User {
     @OneToOne
     @JoinColumn(name = "terms_id")
     private Terms terms;
+
+
 
     public User(SignupRequestDto signupRequestDto, String password, UserRoleEnum role, Terms terms) {
         this.email = signupRequestDto.getEmail();
