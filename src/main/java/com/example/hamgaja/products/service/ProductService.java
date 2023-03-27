@@ -44,7 +44,8 @@ public class ProductService {
                 .description(productRequestDto.getDescription())
                 .price(productRequestDto.getPrice())
                 .productType(productType)
-                .ownerComment(productRequestDto.getOwnerComment()).build();
+                .ownerComment(productRequestDto.getOwnerComment())
+                .user(user).build();
         productRepository.save(product);
         return new ProductResponseDto(product);
 
@@ -101,6 +102,6 @@ public class ProductService {
     }
     //프로덕트와 사용자 일치 확인
     private boolean isMatchProduct(Product product, User user) {
-        return product.UserId().equals(user.getId());
+        return product.getUser().getId().equals(user.getId());
     }
 }
