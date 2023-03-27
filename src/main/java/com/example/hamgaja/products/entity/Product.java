@@ -1,6 +1,8 @@
 package com.example.hamgaja.products.entity;
 
 import com.example.hamgaja.products.dto.ProductRequestDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +11,8 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,23 +38,24 @@ public class Product {
 
     @Column(nullable = false)
     private String ownerComment;
-    //product의 위치
+    //Product 의 위치
     @Column(nullable = false)
     private String address;
     //위치 기반 시스템의 위치
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name="location_id")
     private Location location;
 
-    public Product(String name, String star, float score, String description, String price, ProductType productType, String ownerComment, String address, Location location) {
-        this.name = name;
-        this.star = star;
-        this.score = score;
-        this.description = description;
-        this.price = price;
-        this.productType = productType;
-        this.ownerComment = ownerComment;
-        this.address = address;
-        this.location = location;
+    public void update(ProductRequestDto productRequestDto) {
+        this.name = productRequestDto.getName();
+        this.star = productRequestDto.getStar();
+        this.score = productRequestDto.getScore();
+        this.description = productRequestDto.getDescription();
+        this.price = productRequestDto.getPrice();
+        this.productType = productRequestDto.getProductType();
+        this.ownerComment = productRequestDto.getOwnerComment();
+        this.address = productRequestDto.getAddress();
     }
+
+
 }
