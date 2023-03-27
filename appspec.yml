@@ -1,20 +1,25 @@
 version: 0.0
 os: linux
 files:
-  - source:  /
-    destination: /home/ubuntu/app
+  - source: /
+    destination: /home/ubuntu/app/
     overwrite: yes
+
 permissions:
   - object: /
     pattern: "**"
     owner: ubuntu
     group: ubuntu
+
 hooks:
   AfterInstall:
-    - location: scripts/stop.sh
-      timeout: 60
-      runas: ubuntu
   ApplicationStart:
-    - location: scripts/start.sh
-      timeout: 60
+    - location: scripts/run.sh
+      timeout: 100
+      runas: ubuntu
+    - location: scripts/healthcheck.sh
+      timeout: 100
+      runas: ubuntu
+    - location: scripts/switch.sh
+      timeout: 100
       runas: ubuntu
