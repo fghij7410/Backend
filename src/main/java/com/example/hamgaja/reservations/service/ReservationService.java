@@ -2,10 +2,18 @@ package com.example.hamgaja.reservations.service;
 
 import com.example.hamgaja.reservations.dto.ReservationRequestDto;
 import com.example.hamgaja.reservations.dto.ReservationResponseDto;
+import com.example.hamgaja.reservations.entity.Reservation;
+import com.example.hamgaja.reservations.entity.Room;
+import com.example.hamgaja.reservations.exception.ReservationErrorCode;
+import com.example.hamgaja.reservations.exception.ReservationException;
 import com.example.hamgaja.reservations.repository.ReservationRepository;
+import com.example.hamgaja.reservations.repository.RoomRepository;
+import com.example.hamgaja.security.UserDetailsImpl;
 import com.example.hamgaja.users.entity.User;
+import com.example.hamgaja.users.exception.UserErrorCode;
+import com.example.hamgaja.users.exception.UserException;
+import com.example.hamgaja.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,25 +22,35 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
-
+    private final RoomRepository roomRepository;
+    private final UserRepository userRepository;
     @Transactional
-    public ReservationResponseDto addReservation(ReservationRequestDto reservationRequestDto, User user) {
+    public ReservationResponseDto addReservation(Long roomId,
+                                                 ReservationRequestDto reservationRequestDto,
+                                                 UserDetailsImpl userDetails) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(()-> new ReservationException(ReservationErrorCode.ROOM_NOT_FOUND));
+
+        User user = userDetails.getUser();
+
+        Reservation reservation = new Reservation(reservationRequestDto, room, user);
+        reservationRepository.save(reservation);
         return null;
     }
 
 
     @Transactional(readOnly = true)
-    public ReservationResponseDto getReservation(ReservationRequestDto reservationRequestDto, User user) {
+    public ReservationResponseDto getReservation(ReservationRequestDto reservationRequestDto, UserDetailsImpl userDetails) {
         return null;
     }
 
     @Transactional
-    public String editReservation(ReservationRequestDto reservationRequestDto, User user) {
+    public String editReservation(Long reservationId, ReservationRequestDto reservationRequestDto, UserDetailsImpl userDetails) {
         return null;
     }
 
     @Transactional
-    public String cancelReservation(ReservationRequestDto reservationRequestDto, User user) {
+    public String cancelReservation(Long reservationId, ReservationRequestDto reservationRequestDto, UserDetailsImpl userDetails) {
         return null;
     }
 

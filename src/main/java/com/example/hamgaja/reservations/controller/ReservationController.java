@@ -10,7 +10,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/reservations")
 @RequiredArgsConstructor
 public class ReservationController {
 
@@ -19,21 +18,22 @@ public class ReservationController {
     /**
      * 예약하기
      */
-    @PostMapping
+    @PostMapping("/rooms/{roomId}/reservations")
     public ResponseEntity<ReservationResponseDto> addReservation(
-            @RequestBody ReservationRequestDto reservationRequestDto,
+            @PathVariable Long roomId,
+            @RequestBody ReservationRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok().body(reservationService.addReservation(reservationRequestDto, userDetails.getUser()));
+        return ResponseEntity.ok().body(reservationService.addReservation(roomId, requestDto, userDetails));
     }
 
     /**
      * 사용자 예약 조회
      */
-    @PostMapping
+    @GetMapping
     public ResponseEntity<ReservationResponseDto> getReservation(
-            @RequestBody ReservationRequestDto reservationRequestDto,
+            @RequestBody ReservationRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok().body(reservationService.getReservation(reservationRequestDto, userDetails.getUser()));
+        return ResponseEntity.ok().body(reservationService.getReservation(requestDto, userDetails));
     }
 
     /**
@@ -42,9 +42,9 @@ public class ReservationController {
     @PatchMapping("/{reservationId}")
     public ResponseEntity<String> editReservation(
             @PathVariable Long reservationId,
-            @RequestBody ReservationRequestDto reservationRequestDto,
+            @RequestBody ReservationRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok().body(reservationService.editReservation(reservationRequestDto, userDetails.getUser()));
+        return ResponseEntity.ok().body(reservationService.editReservation(reservationId, requestDto, userDetails));
     }
 
     /**
@@ -53,8 +53,8 @@ public class ReservationController {
     @DeleteMapping("/{reservationId}")
     public ResponseEntity<String> cancelReservation(
             @PathVariable Long reservationId,
-            @RequestBody ReservationRequestDto reservationRequestDto,
+            @RequestBody ReservationRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok().body(reservationService.cancelReservation(reservationRequestDto, userDetails.getUser()));
+        return ResponseEntity.ok().body(reservationService.cancelReservation(reservationId, requestDto, userDetails));
     }
 }
