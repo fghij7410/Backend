@@ -7,5 +7,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ReservationException extends RuntimeException {
-    private final UserErrorCode errorCode;
+    private final ReservationErrorCode errorCode;
 }
