@@ -44,7 +44,8 @@ public class ProductService {
         Location location = new Location("서울특별시 강남구","서울특별시","강남구");
         locationRepository.save(location);
 
-        Product product = new Product().builder().name(productRequestDto.getName())
+        Product product = new Product().builder()
+                .name(productRequestDto.getName())
                 .star(productRequestDto.getStar())
                 .address(productRequestDto.getAddress())
                 .description(productRequestDto.getDescription())

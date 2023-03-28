@@ -28,6 +28,7 @@ public class ProductController {
     //프로덕트 추가
     @PostMapping("/products")
     public ResponseEntity addProduct(ProductRequestDto productRequestDto,@AuthenticationPrincipal UserDetailsImpl userDetails,
+
                                      @RequestParam(value = "fileType") String fileType,
                                      @RequestPart(value = "mainImage") List<MultipartFile> multipartFiles){
         S3ResponseDto s3ResponseDto = s3UploaderService.uploadFiles(fileType, multipartFiles);
