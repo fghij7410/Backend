@@ -17,7 +17,10 @@ public enum ProductErrorCode {
 
 //    /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     LODGING_NOT_FOUND(NOT_FOUND, "선택한 숙소를 찾을 수 없습니다."),
-    ROOM_NOT_FOUND(NOT_FOUND, "선택한 객실 찾을 수 없습니다.")
+    ROOM_NOT_FOUND(NOT_FOUND, "선택한 객실 찾을 수 없습니다."),
+    NOT_FOUND_IMAGE(NOT_FOUND, "선택한 이미지 찾을 수 없습니다.")
+
+
 
     ;
     private final HttpStatus httpStatus;

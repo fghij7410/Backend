@@ -30,7 +30,7 @@ public class ProductService {
     private final UserRepository userRepository;
     //프로덕트 추가
     @Transactional
-    public ProductResponseDto addProduct(User user, ProductRequestDto productRequestDto) {
+    public ProductResponseDto addProduct(User user,String imageUrl ,ProductRequestDto productRequestDto) {
         user = userRepository.findByIdAndRole(user.getId(),user.getRole());
         if(!user.getRole().equals(BUSINESS)){
             throw  new UserException(UserErrorCode.NOT_HAVE_PERMISSION);
@@ -45,7 +45,9 @@ public class ProductService {
                 .price(productRequestDto.getPrice())
                 .productType(productType)
                 .ownerComment(productRequestDto.getOwnerComment())
-                .user(user).build();
+                .user(user)
+                .imageUrl(imageUrl)
+                .build();
         productRepository.save(product);
         return new ProductResponseDto(product);
 
