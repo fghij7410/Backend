@@ -9,7 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class S3FileDto {
+public class S3RequestDto {
     private String originalFileName;
     private String uploadFileName;
     private String uploadFilePath;

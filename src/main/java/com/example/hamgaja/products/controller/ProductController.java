@@ -27,12 +27,13 @@ public class ProductController {
     private final S3UploaderService s3UploaderService;
     //프로덕트 추가
     @PostMapping("/products")
-    public ResponseEntity addProduct(@AuthenticationPrincipal UserDetailsImpl userDetails, ProductRequestDto productRequestDto,
+    public ResponseEntity addProduct(ProductRequestDto productRequestDto,@AuthenticationPrincipal UserDetailsImpl userDetails,
                                      @RequestParam(value = "fileType") String fileType,
-                                     @RequestPart(value = "files") List<MultipartFile> multipartFiles){
+                                     @RequestPart(value = "mainImage") List<MultipartFile> multipartFiles){
         S3ResponseDto s3ResponseDto = s3UploaderService.uploadFiles(fileType, multipartFiles);
         System.out.println(productRequestDto.getName());
         System.out.println(productRequestDto.getAddress());
+
         return ResponseMessage.SuccessResponse("숙소 등록 성공",productService.addProduct(userDetails, s3ResponseDto.getUploadFileUrl(), productRequestDto));
     }
     //프로덕트 전체 조회

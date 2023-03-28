@@ -4,7 +4,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
-import com.example.hamgaja.products.dto.S3FileDto;
+import com.example.hamgaja.products.dto.S3RequestDto;
 import com.example.hamgaja.products.dto.S3ResponseDto;
 import com.example.hamgaja.products.entity.S3Image;
 import com.example.hamgaja.products.exception.ProductErrorCode;
@@ -37,7 +37,7 @@ public class S3UploaderService {
      */
     public S3ResponseDto uploadFiles(String fileType, List<MultipartFile> multipartFiles) {
 
-        List<S3FileDto> s3files = new ArrayList<>();
+        List<S3RequestDto> s3files = new ArrayList<>();
 
         String uploadFilePath = fileType + "/" + getFolderName();
 
@@ -69,7 +69,7 @@ public class S3UploaderService {
                 log.error("Filed upload failed", e);
             }
             s3files.add(
-                    S3FileDto.builder()
+                    S3RequestDto.builder()
                             .originalFileName(originalFileName)
                             .uploadFileName(uploadFileName)
                             .uploadFilePath(uploadFilePath)
@@ -81,7 +81,7 @@ public class S3UploaderService {
 
 
         S3ResponseDto responseDto = new S3ResponseDto();
-        for (S3FileDto file : s3files) {
+        for (S3RequestDto file : s3files) {
             responseDto.setOriginalFileName(file.getOriginalFileName());
             responseDto.setUploadFileName(file.getUploadFileName());
             responseDto.setUploadFilePath(file.getUploadFilePath());
@@ -97,10 +97,9 @@ public class S3UploaderService {
     /**
      * S3에 업로드된 파일 삭제
      */
-    public String deleteFile(Long s3Id) {
-        S3Image s3Image = s3ImageRepository.findById(s3Id).orElseThrow(
+    public void deleteFile(Long id) {
+        S3Image s3Image = s3ImageRepository.findById(id).orElseThrow(
                 () -> new ProductException(ProductErrorCode.NOT_FOUND_IMAGE));
-        String result = "success";
 
         try {
             String keyName = s3Image.getUploadFilePath() + "/" + s3Image.getUploadFileName(); // ex) 구분/년/월/일/파일.확장자
@@ -108,14 +107,13 @@ public class S3UploaderService {
             if (isObjectExist) {
                 amazonS3Client.deleteObject(bucketName, keyName);
             } else {
-                result = "file not found";
+                throw new ProductException(ProductErrorCode.NOT_FOUND_IMAGE);
             }
         } catch (Exception e) {
             log.debug("Delete File failed", e);
         }
 
-        s3ImageRepository.deleteById(s3Id);
-        return result;
+        s3ImageRepository.deleteById(id);
     }
 
 //    public String deleteFile(String uploadFilePath, String uuidFileName) {
