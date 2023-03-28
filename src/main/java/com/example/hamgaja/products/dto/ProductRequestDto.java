@@ -9,10 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductRequestDto {
     private String name;
     private String star;
-    private float score;
     private String address;
     private String description;
-    private String price;
     private ProductType productType;
     private String ownerComment;
 

@@ -57,9 +57,7 @@ public class Product {
     public void update(ProductRequestDto productRequestDto) {
         this.name = productRequestDto.getName();
         this.star = productRequestDto.getStar();
-        this.score = productRequestDto.getScore();
         this.description = productRequestDto.getDescription();
-        this.price = productRequestDto.getPrice();
         this.productType = productRequestDto.getProductType();
         this.ownerComment = productRequestDto.getOwnerComment();
         this.address = productRequestDto.getAddress();
