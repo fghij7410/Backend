@@ -24,15 +24,8 @@ public class Product {
 
     @Column(nullable = false)
     private String star;
-    @Column(nullable = false)
-    private float score;
-
     @Column(nullable = false,length = 4000)
     private String description;
-
-    @Column(nullable = false)
-    private String price;
-
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private ProductType productType;
@@ -58,7 +51,6 @@ public class Product {
         this.name = productRequestDto.getName();
         this.star = productRequestDto.getStar();
         this.description = productRequestDto.getDescription();
-        this.productType = productRequestDto.getProductType();
         this.ownerComment = productRequestDto.getOwnerComment();
         this.address = productRequestDto.getAddress();
 

@@ -7,6 +7,7 @@ import com.example.hamgaja.products.entity.Product;
 import com.example.hamgaja.products.entity.ProductType;
 import com.example.hamgaja.products.exception.ProductErrorCode;
 import com.example.hamgaja.products.exception.ProductException;
+import com.example.hamgaja.products.repository.LocationRepository;
 import com.example.hamgaja.products.repository.ProductRepository;
 import com.example.hamgaja.security.UserDetailsImpl;
 import com.example.hamgaja.users.entity.User;
@@ -30,6 +31,8 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     private final UserRepository userRepository;
+
+    private final LocationRepository locationRepository;
     //프로덕트 추가
     @Transactional
     public ProductResponseDto addProduct(UserDetailsImpl userDetails, String imageUrl , ProductRequestDto productRequestDto) {
@@ -39,7 +42,7 @@ public class ProductService {
         }
         ProductType productType = ProductType.HOTEL;
         Location location = new Location("서울특별시 강남구","서울특별시","강남구");
-
+        locationRepository.save(location);
 
         Product product = new Product().builder().name(productRequestDto.getName())
                 .star(productRequestDto.getStar())
