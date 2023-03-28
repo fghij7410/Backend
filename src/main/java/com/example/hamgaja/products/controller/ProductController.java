@@ -4,14 +4,18 @@ import com.example.hamgaja.message.ResponseMessage;
 import com.example.hamgaja.products.dto.LocationRequestDto;
 import com.example.hamgaja.products.dto.ProductRequestDto;
 import com.example.hamgaja.products.dto.ProductResponseDto;
+import com.example.hamgaja.products.dto.S3ResponseDto;
 import com.example.hamgaja.products.service.ProductService;
+import com.example.hamgaja.products.service.S3UploaderService;
 import com.example.hamgaja.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @RestController
@@ -19,10 +23,15 @@ import javax.servlet.http.HttpServletRequest;
 public class ProductController {
 
     private final ProductService productService;
+
+    private final S3UploaderService s3UploaderService;
     //프로덕트 추가
     @PostMapping("/products")
-    public ResponseEntity addProduct(@AuthenticationPrincipal UserDetailsImpl userDetails,@RequestBody ProductRequestDto productRequestDto){
-        return ResponseMessage.SuccessResponse("숙소 등록 성공",productService.addProduct(userDetails.getUser(),productRequestDto));
+    public ResponseEntity addProduct(@AuthenticationPrincipal UserDetailsImpl userDetails, ProductRequestDto productRequestDto,
+                                     @RequestParam(value = "fileType") String fileType,
+                                     @RequestPart(value = "files") List<MultipartFile> multipartFiles){
+        S3ResponseDto s3ResponseDto = s3UploaderService.uploadFiles(fileType, multipartFiles);
+        return ResponseMessage.SuccessResponse("숙소 등록 성공",productService.addProduct(userDetails.getUser(), s3ResponseDto.getUploadFileUrl(), productRequestDto));
     }
     //프로덕트 전체 조회
     @GetMapping("/products")
