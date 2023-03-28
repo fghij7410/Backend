@@ -31,7 +31,9 @@ public class ProductController {
                                      @RequestParam(value = "fileType") String fileType,
                                      @RequestPart(value = "files") List<MultipartFile> multipartFiles){
         S3ResponseDto s3ResponseDto = s3UploaderService.uploadFiles(fileType, multipartFiles);
-        return ResponseMessage.SuccessResponse("숙소 등록 성공",productService.addProduct(userDetails.getUser(), s3ResponseDto.getUploadFileUrl(), productRequestDto));
+        System.out.println(productRequestDto.getName());
+        System.out.println(productRequestDto.getAddress());
+        return ResponseMessage.SuccessResponse("숙소 등록 성공",productService.addProduct(userDetails, s3ResponseDto.getUploadFileUrl(), productRequestDto));
     }
     //프로덕트 전체 조회
     @GetMapping("/products")
@@ -41,12 +43,12 @@ public class ProductController {
     //프로덕트 수정
     @PatchMapping("/products/{productId}")
     public ResponseEntity modifyProduct(@AuthenticationPrincipal UserDetailsImpl userDetails,@RequestBody ProductRequestDto productRequestDto,@PathVariable Long productId){
-        return ResponseMessage.SuccessResponse(productService.modifyProduct(userDetails.getUser(),productRequestDto,productId),"");
+        return ResponseMessage.SuccessResponse(productService.modifyProduct(userDetails,productRequestDto,productId),"");
     }
     //프로덕트 삭제
     @DeleteMapping("/products/{productId}")
     public ResponseEntity deleteProduct(@AuthenticationPrincipal UserDetailsImpl userDetails,@PathVariable Long productId){
-        return ResponseMessage.SuccessResponse(productService.deleteProduct(userDetails.getUser(),productId),"");
+        return ResponseMessage.SuccessResponse(productService.deleteProduct(userDetails,productId),"");
     }
     //프로덕트 상세 조회
     @GetMapping("/products/{productId}")

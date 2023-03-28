@@ -2,11 +2,13 @@ package com.example.hamgaja.products.service;
 
 import com.example.hamgaja.products.dto.ProductRequestDto;
 import com.example.hamgaja.products.dto.ProductResponseDto;
+import com.example.hamgaja.products.entity.Location;
 import com.example.hamgaja.products.entity.Product;
 import com.example.hamgaja.products.entity.ProductType;
 import com.example.hamgaja.products.exception.ProductErrorCode;
 import com.example.hamgaja.products.exception.ProductException;
 import com.example.hamgaja.products.repository.ProductRepository;
+import com.example.hamgaja.security.UserDetailsImpl;
 import com.example.hamgaja.users.entity.User;
 import com.example.hamgaja.users.exception.UserErrorCode;
 import com.example.hamgaja.users.exception.UserException;
@@ -30,23 +32,24 @@ public class ProductService {
     private final UserRepository userRepository;
     //프로덕트 추가
     @Transactional
-    public ProductResponseDto addProduct(User user,String imageUrl ,ProductRequestDto productRequestDto) {
-        user = userRepository.findByIdAndRole(user.getId(),user.getRole());
+    public ProductResponseDto addProduct(UserDetailsImpl userDetails, String imageUrl , ProductRequestDto productRequestDto) {
+      User  user = userRepository.findByIdAndRole(userDetails.getUser().getId(), userDetails.getUser().getRole());
         if(!user.getRole().equals(BUSINESS)){
             throw  new UserException(UserErrorCode.NOT_HAVE_PERMISSION);
         }
         ProductType productType = ProductType.HOTEL;
+        Location location = new Location("서울특별시 강남구","서울특별시","강남구");
+
 
         Product product = new Product().builder().name(productRequestDto.getName())
                 .star(productRequestDto.getStar())
-                .score(productRequestDto.getScore())
                 .address(productRequestDto.getAddress())
                 .description(productRequestDto.getDescription())
-                .price(productRequestDto.getPrice())
                 .productType(productType)
                 .ownerComment(productRequestDto.getOwnerComment())
                 .user(user)
                 .imageUrl(imageUrl)
+                .location(location)
                 .build();
         productRepository.save(product);
         return new ProductResponseDto(product);
@@ -64,8 +67,8 @@ public class ProductService {
     }
     //프로덕트 수정
     @Transactional
-    public String modifyProduct(User user,ProductRequestDto productRequestDto,Long productId) {
-        user = userRepository.findById(user.getId()).orElseThrow(
+    public String modifyProduct(UserDetailsImpl userDetails,ProductRequestDto productRequestDto,Long productId) {
+      User  user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 ()->new UserException(UserErrorCode.NOT_AUTHOR)
         );
         if(!user.getRole().equals(BUSINESS)){
@@ -80,8 +83,8 @@ public class ProductService {
     }
     //프로덕트 삭제
     @Transactional
-    public String deleteProduct(User user,Long productId) {
-        user = userRepository.findById(user.getId()).orElseThrow(
+    public String deleteProduct(UserDetailsImpl userDetails,Long productId) {
+      User  user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 ()->new UserException(UserErrorCode.NOT_AUTHOR)
         );
         if(!user.getRole().equals(BUSINESS)){
