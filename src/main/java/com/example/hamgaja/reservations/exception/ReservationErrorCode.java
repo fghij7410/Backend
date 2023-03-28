@@ -16,6 +16,7 @@ public enum ReservationErrorCode {
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     RESERVATION_NOT_FOUND(NOT_FOUND, "등록된 예약이 없습니다"),
+    ROOM_NOT_FOUND(NOT_FOUND, "객실을 찾을 수 없습니다."),
     ;
 
     private final HttpStatus httpStatus;

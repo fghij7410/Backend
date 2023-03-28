@@ -14,6 +14,5 @@ public class ReservationExceptionHandler {
     protected ResponseEntity<ResponseMessage> handleCustomException(ReservationException e) {
         log.error("handleCustomException throw CustomException : {}", e.getErrorCode());
         return ResponseMessage.ErrorResponse(e.getErrorCode());
-
     }
 }

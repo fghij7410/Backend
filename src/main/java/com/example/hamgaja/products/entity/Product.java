@@ -51,6 +51,9 @@ public class Product {
     @JoinColumn(name="user_id")
     private User user;
 
+    @Column(nullable = false)
+    private String imageUrl;
+
     public void update(ProductRequestDto productRequestDto) {
         this.name = productRequestDto.getName();
         this.star = productRequestDto.getStar();
@@ -60,6 +63,7 @@ public class Product {
         this.productType = productRequestDto.getProductType();
         this.ownerComment = productRequestDto.getOwnerComment();
         this.address = productRequestDto.getAddress();
+
     }
 
 
