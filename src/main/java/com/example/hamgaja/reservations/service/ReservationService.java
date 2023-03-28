@@ -10,6 +10,9 @@ import com.example.hamgaja.reservations.repository.ReservationRepository;
 import com.example.hamgaja.reservations.repository.RoomRepository;
 import com.example.hamgaja.security.UserDetailsImpl;
 import com.example.hamgaja.users.entity.User;
+import com.example.hamgaja.users.exception.UserErrorCode;
+import com.example.hamgaja.users.exception.UserException;
+import com.example.hamgaja.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,7 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final RoomRepository roomRepository;
+    private final UserRepository userRepository;
     @Transactional
     public ReservationResponseDto addReservation(Long roomId,
                                                  ReservationRequestDto reservationRequestDto,
