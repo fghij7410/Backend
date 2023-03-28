@@ -3,7 +3,8 @@
 ### 1. 배포환경
  
  - AWS EC2
- - Ubuntu
+ - Ubuntu 20.04
+ - NGINX
 
 ### 2. DB
  
