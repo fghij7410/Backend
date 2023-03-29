@@ -1,5 +1,6 @@
 package com.example.hamgaja.users.service;
 
+import com.example.hamgaja.security.UserDetailsImpl;
 import com.example.hamgaja.users.dto.LoginRequestDto;
 import com.example.hamgaja.users.dto.SignupRequestDto;
 import com.example.hamgaja.users.dto.TermsRequestDto;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.example.hamgaja.users.entity.UserRoleEnum.BUSINESS;
 
 @Service
 @RequiredArgsConstructor
@@ -115,4 +118,14 @@ public class UserService {
             throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
         }
     }
+
+    public User checkBUSINESS(UserDetailsImpl userDetails){
+       User user= userDetails.getUser();
+        if(!user.getRole().equals(BUSINESS)){
+            throw  new UserException(UserErrorCode.NOT_HAVE_PERMISSION);
+        }
+        return user;
+    }
+
+
 }

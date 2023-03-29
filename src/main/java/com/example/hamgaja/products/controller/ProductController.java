@@ -44,6 +44,7 @@ public class ProductController {
         List<S3ResponseDto> s3RoomImageUrlList = s3UploaderService.uploadFiles(productRequestDto.getProductType(), roomImages);
         return ResponseMessage.SuccessResponse("숙소 등록 성공",
                 productService.addProduct(userDetails, s3MainImageUrlList, s3RoomImageUrlList, productRequestDto));
+
     }
 
     //프로덕트 전체 조회
@@ -54,10 +55,13 @@ public class ProductController {
 
     //프로덕트 수정
     @PatchMapping("/products/{productId}")
-    public ResponseEntity modifyProduct(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                        @RequestBody ProductRequestDto productRequestDto,
-                                        @PathVariable Long productId) {
-        return ResponseMessage.SuccessResponse(productService.modifyProduct(userDetails, productRequestDto, productId), "");
+
+    public ResponseEntity modifyProduct(@AuthenticationPrincipal UserDetailsImpl userDetails, ProductRequestDto productRequestDto,@PathVariable Long productId,
+                                        @RequestParam(value = "fileType") String fileType,
+                                        @RequestPart(value = "mainImage") List<MultipartFile> multipartFiles){
+
+        return ResponseMessage.SuccessResponse(productService.modifyProduct(userDetails,productRequestDto,productId,fileType,multipartFiles),"");
+
     }
 
     //프로덕트 삭제
@@ -66,6 +70,7 @@ public class ProductController {
         String result = productService.deleteProduct(userDetails, productId);
         s3UploaderService.deleteFile(productId);
         return ResponseMessage.SuccessResponse(result, "");
+
     }
 
     //프로덕트 상세 조회
