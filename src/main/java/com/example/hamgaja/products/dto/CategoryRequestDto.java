@@ -6,16 +6,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CategoryRequestDto {
-    Boolean spa;
-    Boolean miniBar;
-    Boolean wifi;
-    Boolean bathItem;
-    Boolean tv;
-    Boolean airConditioner;
-    Boolean refrigerator;
-    Boolean showerRoom;
-    Boolean tub;
-    Boolean dryer;
-    Boolean iron;
-    Boolean electricRiceCooker;
+    private Boolean spa;
+    private Boolean miniBar;
+    private Boolean wifi;
+    private Boolean bathItem;
+    private Boolean tv;
+    private Boolean airConditioner;
+    private Boolean refrigerator;
+    private Boolean showerRoom;
+    private Boolean tub;
+    private Boolean dryer;
+    private Boolean iron;
+    private Boolean electricRiceCooker;
 }
