@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.example.hamgaja.users.entity.UserRoleEnum.BUSINESS;
 
@@ -82,16 +83,19 @@ public class ProductService {
         }
 
         roomRepository.saveAll(roomList);
-        return new ProductResponseDto(product);
+        return new ProductResponseDto(product, categoryMap);
     }
 
     //프로덕트 전체 조회
     @Transactional(readOnly = true)
     public List<ProductResponseDto> getAllProduct() {
         List<Product> products = productRepository.findAll();
+        List<Category> categories = categoryRepository.findAll();
+        Map<String, Boolean> category = categories.stream()
+                .collect(Collectors.toMap(Category::getName, s-> Boolean.FALSE));
         List<ProductResponseDto> result = new ArrayList<>();
         for (Product product : products) {
-            result.add(new ProductResponseDto(product));
+            result.add(new ProductResponseDto(product, category));
         }
         return result;
     }
