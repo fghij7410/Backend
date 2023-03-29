@@ -1,5 +1,6 @@
 package com.example.hamgaja.products.service;
 
+
 import com.example.hamgaja.products.dto.*;
 import com.example.hamgaja.products.entity.Location;
 import com.example.hamgaja.products.entity.Product;
@@ -18,6 +19,7 @@ import com.example.hamgaja.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +32,11 @@ import static com.example.hamgaja.users.entity.UserRoleEnum.BUSINESS;
 public class ProductService {
 
     private final ProductRepository productRepository;
+
     private final UserRepository userRepository;
     private final LocationRepository locationRepository;
     private final RoomRepository roomRepository;
+    private final S3UploaderService s3UploaderService;
 
     //프로덕트 추가
     @Transactional
@@ -84,17 +88,18 @@ public class ProductService {
 
     //프로덕트 수정
     @Transactional
-    public String modifyProduct(UserDetailsImpl userDetails, ProductRequestDto productRequestDto, Long productId) {
-        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
-                () -> new UserException(UserErrorCode.NOT_AUTHOR)
-        );
-        if (!user.getRole().equals(BUSINESS)) {
-            throw new UserException(UserErrorCode.NOT_HAVE_PERMISSION);
-        }
+    public String modifyProduct(UserDetailsImpl userDetails,ProductRequestDto productRequestDto,Long productId,String fileType,List<MultipartFile> multipartFiles) {
+        User user = userRepository.findByIdAndRole(userDetails.getUser().getId(),userDetails.getUser().getRole());
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new ProductException(ProductErrorCode.LODGING_NOT_FOUND)
         );
-        if (isMatchProduct(product, user)) {
+
+
+        if(!isMatchProduct(product,user)){
+            throw new UserException(UserErrorCode.NOT_AUTHOR);
+        }else{
+            s3UploaderService.deleteFile(productId);
+            s3UploaderService.uploadFiles(fileType,multipartFiles);
             product.update(productRequestDto);
         }
         return "숙소 수정 성공";
@@ -103,18 +108,17 @@ public class ProductService {
 
     //프로덕트 삭제
     @Transactional
-    public String deleteProduct(UserDetailsImpl userDetails, Long productId) {
-        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
-                () -> new UserException(UserErrorCode.NOT_AUTHOR)
-        );
-        if (!user.getRole().equals(BUSINESS)) {
-            throw new UserException(UserErrorCode.NOT_HAVE_PERMISSION);
-        }
+    public String deleteProduct(UserDetailsImpl userDetails,Long productId) {
+        User user = userRepository.findByIdAndRole(userDetails.getUser().getId(),userDetails.getUser().getRole());
+
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new ProductException(ProductErrorCode.LODGING_NOT_FOUND)
         );
-        if (isMatchProduct(product, user)) {
+        if(!isMatchProduct(product,user)){
+            throw new UserException(UserErrorCode.NOT_AUTHOR);
+        }else{
             productRepository.deleteById(product.getId());
+            s3UploaderService.deleteFile(productId);
         }
 
         return "숙소 삭제 성공";

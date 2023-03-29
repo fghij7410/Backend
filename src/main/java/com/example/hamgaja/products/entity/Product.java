@@ -1,6 +1,7 @@
 package com.example.hamgaja.products.entity;
 
 import com.example.hamgaja.products.dto.ProductRequestDto;
+import com.example.hamgaja.products.dto.S3ResponseDto;
 import com.example.hamgaja.users.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
