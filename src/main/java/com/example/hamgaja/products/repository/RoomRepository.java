@@ -8,4 +8,8 @@ import java.util.List;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
     List<Room> findAllByProductId(Long productId);
+
+    void deleteAllByProductId(Long productId);
+
+    List<Room> findByRoomImageUrl(Long productId);
 }
