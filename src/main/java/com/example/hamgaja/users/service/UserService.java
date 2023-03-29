@@ -36,7 +36,6 @@ public class UserService {
         // 약관 처리
         Terms terms = termRepository.save(new Terms(termsRequestDto));
 
-        //
         User user = new User(signupRequestDto, passwordEncoder.encode(signupRequestDto.getPassword()), role, terms );
         userRepository.save(user);
 
@@ -50,37 +49,14 @@ public class UserService {
         checkedEmailAndUserName(signupRequestDto);
         // 권한 부여
         UserRoleEnum role = UserRoleEnum.BUSINESS;
-
-        // 사업자번호에 따른 권한부여 로직 작성 예정
-
         // 약관 처리
         Terms terms = termRepository.save(new Terms(termsRequestDto));
 
-        //
         User user = new User(signupRequestDto, passwordEncoder.encode(signupRequestDto.getPassword()), role, terms );
         userRepository.save(user);
 
         return "사업자 가입 성공";
     }
-
-
-//    @Transactional(readOnly = true)
-//    public Map<String, String> login(LoginRequestDto loginRequestDto) {
-//        // 사용자 확인
-//        User user = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(
-//                () -> new UserException(UserErrorCode.USER_NOT_FOUND)
-//        );
-//        // 비밀번호 확인
-//        if(!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())){
-//            throw  new UserException(UserErrorCode.NOT_PROPER_PASSWORD);
-//        }
-//
-//        Map<String, String> result = new HashMap<>();
-//        result.put("username", user.getUsername());
-//        result.put("email", user.getEmail());
-//
-//        return result;
-//    }
 
     @Transactional(readOnly = true)
     public User login(LoginRequestDto loginRequestDto) {

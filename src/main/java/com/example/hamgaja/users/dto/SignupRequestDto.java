@@ -1,5 +1,6 @@
 package com.example.hamgaja.users.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.Email;
@@ -7,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Getter
+@Builder
 public class SignupRequestDto {
     @NotBlank
     @Email(message = "이메일 형식이 올바르지 않습니다.")
@@ -21,6 +23,5 @@ public class SignupRequestDto {
     message = "닉네임 형식이 올바르지 않습니다.")
     private String username;
 
-//    private String businessNumber;
 
 }
