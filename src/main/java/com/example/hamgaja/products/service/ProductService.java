@@ -1,8 +1,6 @@
 package com.example.hamgaja.products.service;
 
-import com.example.hamgaja.products.dto.ProductRequestDto;
-import com.example.hamgaja.products.dto.ProductResponseDto;
-import com.example.hamgaja.products.dto.S3ResponseDto;
+import com.example.hamgaja.products.dto.*;
 import com.example.hamgaja.products.entity.Location;
 import com.example.hamgaja.products.entity.Product;
 import com.example.hamgaja.products.entity.ProductType;
@@ -124,11 +122,13 @@ public class ProductService {
 
     //프로덕트 상세 조회
     @Transactional(readOnly = true)
-    public Product getProduct(Long productId) {
+    public SingleProductResponseDto getProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new ProductException(ProductErrorCode.LODGING_NOT_FOUND)
         );
-        return product;
+        List<RoomResponseDto> roomList = roomRepository.findAllByProductId(product.getId())
+                .stream().map(RoomResponseDto::new).toList();
+        return new SingleProductResponseDto(product, roomList);
     }
 
     //프로덕트와 사용자 일치 확인

@@ -2,12 +2,14 @@ package com.example.hamgaja.products.entity;
 
 import com.example.hamgaja.products.dto.RoomRequestDto;
 import com.example.hamgaja.products.entity.Product;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
+@Getter
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

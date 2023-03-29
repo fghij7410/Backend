@@ -3,14 +3,11 @@ package com.example.hamgaja.products.dto;
 import com.example.hamgaja.products.entity.Product;
 import com.example.hamgaja.products.entity.ProductType;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
-public class ProductResponseDto {
-
+public class SingleProductResponseDto {
     private Long id;
     private String name;
     private String star;
@@ -21,7 +18,8 @@ public class ProductResponseDto {
     private String imageUrl;
     private List<RoomResponseDto> roomList;
 
-    public ProductResponseDto(Product product) {
+
+    public SingleProductResponseDto(Product product, List<RoomResponseDto> roomList) {
         this.id = product.getId();
         this.name = product.getName();
         this.star = product.getStar();
@@ -30,5 +28,6 @@ public class ProductResponseDto {
         this.imageUrl = product.getImageUrl();
         this.productType = product.getProductType();
         this.ownerComment = product.getOwnerComment();
+        this.roomList = roomList;
     }
 }
