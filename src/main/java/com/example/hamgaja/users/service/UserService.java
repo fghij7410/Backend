@@ -60,19 +60,6 @@ public class UserService {
         return "사업자 가입 성공";
     }
 
-    //회원가입을 위한 검사
-    private void checkedEmailAndUserName (SignupRequestDto signupRequestDto) {
-        // 회원아이디(이메일) 중복 확인
-        boolean found = userRepository.findByEmail(signupRequestDto.getEmail()).isPresent();
-        if (found) {
-            throw new UserException(UserErrorCode.DUPLICATE_USER);
-        }
-        //포스트맨 닉네임 중복확인을 위한 로직
-        found = userRepository.findByUsername(signupRequestDto.getUsername()).isPresent();
-        if (found) {
-            throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
-        }
-    }
 
 //    @Transactional(readOnly = true)
 //    public Map<String, String> login(LoginRequestDto loginRequestDto) {
@@ -113,5 +100,19 @@ public class UserService {
             throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
         }
         return "사용가능한 닉네임입니다.";
+    }
+
+    //회원가입을 위한 검사
+    private void checkedEmailAndUserName (SignupRequestDto signupRequestDto) {
+        // 회원아이디(이메일) 중복 확인
+        boolean found = userRepository.findByEmail(signupRequestDto.getEmail()).isPresent();
+        if (found) {
+            throw new UserException(UserErrorCode.DUPLICATE_USER);
+        }
+        //포스트맨 닉네임 중복확인을 위한 로직
+        found = userRepository.findByUsername(signupRequestDto.getUsername()).isPresent();
+        if (found) {
+            throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
+        }
     }
 }
