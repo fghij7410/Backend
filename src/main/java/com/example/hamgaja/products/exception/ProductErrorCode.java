@@ -14,6 +14,7 @@ public enum ProductErrorCode {
     DUPLICATE_LODGING(BAD_REQUEST, "중복된 숙소가 존재합니다"),
     NOT_PROPER_INPUTFORM(BAD_REQUEST, "입력한 형식이 맞지 않습니다."),
     NOT_PROPER_IMAGE(BAD_REQUEST, "입력한 이미지의 형식이 맞지 않습니다."),
+    NOT_PROPER_CATEGORY(BAD_REQUEST, "입력한 카테고리가 없습니다"),
 
 //    /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     LODGING_NOT_FOUND(NOT_FOUND, "선택한 숙소를 찾을 수 없습니다."),

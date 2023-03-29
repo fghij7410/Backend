@@ -32,7 +32,6 @@ public class ProductController {
     @PostMapping("/products")
     public ResponseEntity addProduct(ProductRequestDto productRequestDto,
                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
         List<MultipartFile> mainImages = productRequestDto.getMainImage();
         List<MultipartFile> roomImages = productRequestDto.getRoomList().stream().map(RoomRequestDto::getRoomImage).toList();
         List<S3ResponseDto> s3MainImageUrlList = s3UploaderService.uploadFiles(productRequestDto.getProductType(), mainImages);

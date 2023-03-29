@@ -18,7 +18,7 @@ public class ProductRequestDto {
     private String description;
     private String ownerComment;
     private String productType;
-    Map<String, Boolean> categories;
+    Map<String, Boolean> category;
     List<MultipartFile> mainImage;
     List<RoomRequestDto> roomList;
 }
