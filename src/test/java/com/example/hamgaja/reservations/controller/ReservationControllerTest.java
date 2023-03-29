@@ -10,11 +10,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,11 +37,11 @@ class ReservationControllerTest {
     @BeforeEach
     public void init(){
         mockMvc = MockMvcBuilders.standaloneSetup(reservationController).build();
-
     }
 
     @DisplayName("post_요청의_체크인_체크아웃_시간이_변환된다")
     @Test
+    @WithMockUser
     public void datetimeformatParse() throws Exception {
         // given
         String url = "/rooms/1/reservations";
@@ -46,21 +50,10 @@ class ReservationControllerTest {
         ResultActions resultActions = this.mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"checkIn\":\"2023-03-28T11:00\", \"checkOut\":\"2023-03-29T12:00\"}"));
-        System.out.println(resultActions.andReturn().getResponse().getContentAsString());
 
         // then
         resultActions
-                .andExpect(status().is4xxClientError());
-    }
-
-    @DisplayName("예약 등록 성공")
-    @Test
-    void reserveSuccess() throws Exception {
-        // given
-
-        // when
-
-        // then
+                .andExpect(status().isOk());
     }
 
     private ReservationRequestDto reserveRequest() {
