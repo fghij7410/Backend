@@ -32,7 +32,7 @@ public class ReservationService {
 
         Reservation reservation = new Reservation(reservationRequestDto, room, user);
         reservationRepository.save(reservation);
-        return "post 성공";
+        return "예약 성공";
     }
 
 
