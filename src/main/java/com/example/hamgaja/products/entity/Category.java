@@ -10,4 +10,8 @@ public class Category {
 
     @Column(nullable = false)
     String name;
+
+    public Category(String name) {
+        this.name = name;
+    }
 }
