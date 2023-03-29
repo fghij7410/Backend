@@ -37,6 +37,8 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductCategoryRepository productCategoryRepository;
 
+    private final S3ImageRepository s3ImageRepository;
+
     //프로덕트 추가
     @Transactional
     public ProductResponseDto addProduct(UserDetailsImpl userDetails,
@@ -130,9 +132,16 @@ public class ProductService {
         );
         if (!isMatchProduct(product, user)) {
             throw new UserException(UserErrorCode.NOT_AUTHOR);
-        } else {
-            productRepository.deleteById(product.getId());
+
+        }else{
+            System.out.println(productId);
+            System.out.println(product.getId());
+            List<Room> roomImageUrl= roomRepository.findByRoomImageUrl(productId);//파일 URL찾기
+            //s3ImageRepository.deleteAllByUploadFileUrl(roomImageUrl);
+            roomRepository.deleteAllByProductId(productId);
             s3UploaderService.deleteFile(productId);
+            productRepository.deleteById(product.getId());
+
         }
 
         return "숙소 삭제 성공";
