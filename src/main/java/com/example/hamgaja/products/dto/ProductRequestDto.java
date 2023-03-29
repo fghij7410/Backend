@@ -1,5 +1,6 @@
 package com.example.hamgaja.products.dto;
 
+import com.example.hamgaja.products.entity.Category;
 import com.example.hamgaja.products.entity.Location;
 import com.example.hamgaja.products.entity.ProductType;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class ProductRequestDto {
     private String description;
     private String ownerComment;
     private String productType;
+    CategoryRequestDto categories;
     List<MultipartFile> mainImage;
     List<RoomRequestDto> roomList;
 }

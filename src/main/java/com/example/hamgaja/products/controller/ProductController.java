@@ -32,12 +32,7 @@ public class ProductController {
     @PostMapping("/products")
     public ResponseEntity addProduct(ProductRequestDto productRequestDto,
                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        productRequestDto.getRoomList().forEach(x ->
-        {
-            log.info("roomName={}", x.getRoomName());
-            log.info("roomPrice={}", x.getRoomPrice());
-            log.info("roomImage={}", x.getRoomImage());
-        });
+
         List<MultipartFile> mainImages = productRequestDto.getMainImage();
         List<MultipartFile> roomImages = productRequestDto.getRoomList().stream().map(RoomRequestDto::getRoomImage).toList();
         List<S3ResponseDto> s3MainImageUrlList = s3UploaderService.uploadFiles(productRequestDto.getProductType(), mainImages);
