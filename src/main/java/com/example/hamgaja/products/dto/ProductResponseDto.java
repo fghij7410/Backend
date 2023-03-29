@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @NoArgsConstructor
@@ -19,9 +20,9 @@ public class ProductResponseDto {
     private ProductType productType;
     private String ownerComment;
     private String imageUrl;
-    private List<RoomResponseDto> roomList;
+    private Map<String, Boolean> category;
 
-    public ProductResponseDto(Product product) {
+    public ProductResponseDto(Product product, Map<String, Boolean> category) {
         this.id = product.getId();
         this.name = product.getName();
         this.star = product.getStar();
@@ -30,5 +31,6 @@ public class ProductResponseDto {
         this.imageUrl = product.getImageUrl();
         this.productType = product.getProductType();
         this.ownerComment = product.getOwnerComment();
+        this.category = category;
     }
 }
