@@ -2,13 +2,11 @@ package com.example.hamgaja.products.service;
 
 
 import com.example.hamgaja.products.dto.*;
-import com.example.hamgaja.products.entity.Location;
-import com.example.hamgaja.products.entity.Product;
-import com.example.hamgaja.products.entity.ProductType;
-import com.example.hamgaja.products.entity.Room;
+import com.example.hamgaja.products.entity.*;
 import com.example.hamgaja.products.exception.ProductErrorCode;
 import com.example.hamgaja.products.exception.ProductException;
 import com.example.hamgaja.products.repository.LocationRepository;
+import com.example.hamgaja.products.repository.ProductCategoryRepository;
 import com.example.hamgaja.products.repository.ProductRepository;
 import com.example.hamgaja.products.repository.RoomRepository;
 import com.example.hamgaja.security.UserDetailsImpl;
@@ -21,8 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static com.example.hamgaja.users.entity.UserRoleEnum.BUSINESS;
 
@@ -37,6 +34,7 @@ public class ProductService {
     private final LocationRepository locationRepository;
     private final RoomRepository roomRepository;
     private final S3UploaderService s3UploaderService;
+    private final ProductCategoryRepository productCategoryRepository;
 
     //프로덕트 추가
     @Transactional
@@ -51,6 +49,7 @@ public class ProductService {
         ProductType productType = ProductType.HOTEL;
         Location location = new Location("서울특별시 강남구", "서울특별시", "강남구");
         locationRepository.save(location);
+        Map<String, Boolean> categoryMap = productRequestDto.getCategories();
 
         Product product = Product.builder().name(productRequestDto.getName())
                 .star(productRequestDto.getStar())
@@ -64,6 +63,15 @@ public class ProductService {
                 .build();
 
         productRepository.save(product);
+
+        Set<Map.Entry<String, Boolean>> entries = categoryMap.entrySet();
+        while (entries.iterator().hasNext()) {
+            Map.Entry<String, Boolean> next = entries.iterator().next();
+            if (next.getValue()) {
+                Category category = new Category(next.getKey());
+                productCategoryRepository.save(new ProductCategory(product, category));
+            }
+        }
 
         List<Room> roomList = new ArrayList<>();
         for (int i = 0; i < s3RoomImage.size(); i++) {
@@ -88,18 +96,18 @@ public class ProductService {
 
     //프로덕트 수정
     @Transactional
-    public String modifyProduct(UserDetailsImpl userDetails,ProductRequestDto productRequestDto,Long productId,String fileType,List<MultipartFile> multipartFiles) {
-        User user = userRepository.findByIdAndRole(userDetails.getUser().getId(),userDetails.getUser().getRole());
+    public String modifyProduct(UserDetailsImpl userDetails, ProductRequestDto productRequestDto, Long productId, String fileType, List<MultipartFile> multipartFiles) {
+        User user = userRepository.findByIdAndRole(userDetails.getUser().getId(), userDetails.getUser().getRole());
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new ProductException(ProductErrorCode.LODGING_NOT_FOUND)
         );
 
 
-        if(!isMatchProduct(product,user)){
+        if (!isMatchProduct(product, user)) {
             throw new UserException(UserErrorCode.NOT_AUTHOR);
-        }else{
+        } else {
             s3UploaderService.deleteFile(productId);
-            s3UploaderService.uploadFiles(fileType,multipartFiles);
+            s3UploaderService.uploadFiles(fileType, multipartFiles);
             product.update(productRequestDto);
         }
         return "숙소 수정 성공";
@@ -108,15 +116,15 @@ public class ProductService {
 
     //프로덕트 삭제
     @Transactional
-    public String deleteProduct(UserDetailsImpl userDetails,Long productId) {
-        User user = userRepository.findByIdAndRole(userDetails.getUser().getId(),userDetails.getUser().getRole());
+    public String deleteProduct(UserDetailsImpl userDetails, Long productId) {
+        User user = userRepository.findByIdAndRole(userDetails.getUser().getId(), userDetails.getUser().getRole());
 
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new ProductException(ProductErrorCode.LODGING_NOT_FOUND)
         );
-        if(!isMatchProduct(product,user)){
+        if (!isMatchProduct(product, user)) {
             throw new UserException(UserErrorCode.NOT_AUTHOR);
-        }else{
+        } else {
             productRepository.deleteById(product.getId());
             s3UploaderService.deleteFile(productId);
         }

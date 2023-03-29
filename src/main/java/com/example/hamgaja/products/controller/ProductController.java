@@ -39,7 +39,6 @@ public class ProductController {
         List<S3ResponseDto> s3RoomImageUrlList = s3UploaderService.uploadFiles(productRequestDto.getProductType(), roomImages);
         return ResponseMessage.SuccessResponse("숙소 등록 성공",
                 productService.addProduct(userDetails, s3MainImageUrlList, s3RoomImageUrlList, productRequestDto));
-
     }
 
     //프로덕트 전체 조회
