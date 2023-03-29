@@ -19,11 +19,11 @@ public class ReservationController {
      * 예약하기
      */
     @PostMapping("/rooms/{roomId}/reservations")
-    public ResponseEntity<ReservationResponseDto> addReservation(
+    public String addReservation(
             @PathVariable Long roomId,
             @RequestBody ReservationRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok().body(reservationService.addReservation(roomId, requestDto, userDetails));
+        return reservationService.addReservation(roomId, requestDto, userDetails);
     }
 
     /**

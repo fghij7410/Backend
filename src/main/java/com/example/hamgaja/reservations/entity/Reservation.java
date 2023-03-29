@@ -1,11 +1,10 @@
 package com.example.hamgaja.reservations.entity;
 
-import com.example.hamgaja.products.entity.Product;
+import com.example.hamgaja.products.entity.Room;
 import com.example.hamgaja.reservations.dto.ReservationRequestDto;
 import com.example.hamgaja.users.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;

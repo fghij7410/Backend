@@ -35,11 +35,11 @@ public class S3UploaderService {
     /**
      * S3로 파일 업로드
      */
-    public S3ResponseDto uploadFiles(String fileType, List<MultipartFile> multipartFiles) {
+    public List<S3ResponseDto> uploadFiles(String productType, List<MultipartFile> multipartFiles) {
 
         List<S3RequestDto> s3files = new ArrayList<>();
 
-        String uploadFilePath = fileType + "/" + getFolderName();
+        String uploadFilePath = productType + "/" + getFolderName();
 
         for (MultipartFile multipartFile : multipartFiles) {
 
@@ -77,20 +77,10 @@ public class S3UploaderService {
                             .build());
         }
 
-//        List<S3Image> s3Images = s3files.stream().map(S3Image::new).toList();   //복수의 이미지 저장
+        List<S3Image> s3Images = s3files.stream().map(S3Image::new).toList();   //복수의 이미지 저장
+        s3ImageRepository.saveAll(s3Images);
 
-
-        S3ResponseDto responseDto = new S3ResponseDto();
-        for (S3RequestDto file : s3files) {
-            responseDto.setOriginalFileName(file.getOriginalFileName());
-            responseDto.setUploadFileName(file.getUploadFileName());
-            responseDto.setUploadFilePath(file.getUploadFilePath());
-            responseDto.setUploadFileUrl(file.getUploadFileUrl());
-        }
-
-        S3Image s3Image = new S3Image(responseDto);
-        s3ImageRepository.save(s3Image);
-        return responseDto;
+        return s3Images.stream().map(S3ResponseDto::new).toList();
     }
 
 

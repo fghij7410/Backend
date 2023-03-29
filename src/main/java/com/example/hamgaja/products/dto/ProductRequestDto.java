@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Data
 public class ProductRequestDto {
     private String name;
@@ -13,5 +15,7 @@ public class ProductRequestDto {
     private String address;
     private String description;
     private String ownerComment;
-
+    private String productType;
+    List<MultipartFile> mainImage;
+    List<RoomRequestDto> roomList;
 }
