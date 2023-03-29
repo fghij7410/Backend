@@ -1,5 +1,6 @@
 package com.example.hamgaja.products.entity;
 
+import com.example.hamgaja.products.dto.S3RequestDto;
 import com.example.hamgaja.products.dto.S3ResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,4 +31,10 @@ public class S3Image {
     }
 
 
+    public S3Image(S3RequestDto s3RequestDto) {
+        this.originalFileName = s3RequestDto.getOriginalFileName();
+        this.uploadFileName = s3RequestDto.getUploadFileName();
+        this.uploadFilePath = s3RequestDto.getUploadFilePath();
+        this.uploadFileUrl = s3RequestDto.getUploadFileUrl();
+    }
 }
