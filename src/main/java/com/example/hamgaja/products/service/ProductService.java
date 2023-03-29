@@ -5,16 +5,14 @@ import com.example.hamgaja.products.dto.*;
 import com.example.hamgaja.products.entity.*;
 import com.example.hamgaja.products.exception.ProductErrorCode;
 import com.example.hamgaja.products.exception.ProductException;
-import com.example.hamgaja.products.repository.LocationRepository;
-import com.example.hamgaja.products.repository.ProductCategoryRepository;
-import com.example.hamgaja.products.repository.ProductRepository;
-import com.example.hamgaja.products.repository.RoomRepository;
+import com.example.hamgaja.products.repository.*;
 import com.example.hamgaja.security.UserDetailsImpl;
 import com.example.hamgaja.users.entity.User;
 import com.example.hamgaja.users.exception.UserErrorCode;
 import com.example.hamgaja.users.exception.UserException;
 import com.example.hamgaja.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +24,7 @@ import static com.example.hamgaja.users.entity.UserRoleEnum.BUSINESS;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -34,6 +33,7 @@ public class ProductService {
     private final LocationRepository locationRepository;
     private final RoomRepository roomRepository;
     private final S3UploaderService s3UploaderService;
+    private final CategoryRepository categoryRepository;
     private final ProductCategoryRepository productCategoryRepository;
 
     //프로덕트 추가
@@ -49,7 +49,7 @@ public class ProductService {
         ProductType productType = ProductType.HOTEL;
         Location location = new Location("서울특별시 강남구", "서울특별시", "강남구");
         locationRepository.save(location);
-        Map<String, Boolean> categoryMap = productRequestDto.getCategories();
+        Map<String, Boolean> categoryMap = productRequestDto.getCategory();
 
         Product product = Product.builder().name(productRequestDto.getName())
                 .star(productRequestDto.getStar())
@@ -65,13 +65,16 @@ public class ProductService {
         productRepository.save(product);
 
         Set<Map.Entry<String, Boolean>> entries = categoryMap.entrySet();
-        while (entries.iterator().hasNext()) {
-            Map.Entry<String, Boolean> next = entries.iterator().next();
+        List<ProductCategory> productCategories = new ArrayList<>();
+        for (Map.Entry<String, Boolean> next : entries) {
             if (next.getValue()) {
-                Category category = new Category(next.getKey());
-                productCategoryRepository.save(new ProductCategory(product, category));
+                Category category = categoryRepository.findByName(next.getKey())
+                        .orElseThrow(()->new ProductException(ProductErrorCode.NOT_PROPER_CATEGORY));
+                productCategories.add(new ProductCategory(product, category));
             }
         }
+
+        productCategoryRepository.saveAll(productCategories);
 
         List<Room> roomList = new ArrayList<>();
         for (int i = 0; i < s3RoomImage.size(); i++) {
@@ -80,7 +83,6 @@ public class ProductService {
 
         roomRepository.saveAll(roomList);
         return new ProductResponseDto(product);
-
     }
 
     //프로덕트 전체 조회
