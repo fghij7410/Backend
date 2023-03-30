@@ -2,9 +2,9 @@ package com.example.hamgaja.users.controller;
 
 import com.example.hamgaja.jwt.JwtUtil;
 import com.example.hamgaja.users.dto.LoginRequestDto;
+import com.example.hamgaja.users.dto.LoginResponseDto;
 import com.example.hamgaja.users.dto.SignupRequestDto;
 import com.example.hamgaja.users.dto.TermsRequestDto;
-import com.example.hamgaja.users.entity.User;
 import com.example.hamgaja.users.exception.UserErrorCode;
 import com.example.hamgaja.users.exception.UserException;
 import com.example.hamgaja.message.ResponseMessage;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,7 +50,7 @@ public class UserController {
     @PostMapping("/users/login")
     public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         // 토큰발급을 위해 user를 반환.
-        User user = userService.login(loginRequestDto);
+        LoginResponseDto user = userService.login(loginRequestDto);
 
         response.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getEmail(), user.getRole()));
         return ResponseMessage.SuccessResponse("로그인 성공!", "");

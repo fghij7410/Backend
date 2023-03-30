@@ -1,7 +1,7 @@
 package com.example.hamgaja.users.service;
 
-import com.example.hamgaja.security.UserDetailsImpl;
 import com.example.hamgaja.users.dto.LoginRequestDto;
+import com.example.hamgaja.users.dto.LoginResponseDto;
 import com.example.hamgaja.users.dto.SignupRequestDto;
 import com.example.hamgaja.users.dto.TermsRequestDto;
 import com.example.hamgaja.users.entity.Terms;
@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.hamgaja.users.entity.UserRoleEnum.BUSINESS;
 
 @Service
 @RequiredArgsConstructor
@@ -59,7 +58,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User login(LoginRequestDto loginRequestDto) {
+    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
         // 사용자 확인
         User user = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(
                 () -> new UserException(UserErrorCode.USER_NOT_FOUND)
@@ -70,7 +69,7 @@ public class UserService {
             throw  new UserException(UserErrorCode.NOT_PROPER_PASSWORD);
         }
 
-        return user;
+        return new LoginResponseDto(user, user.getRole());
     }
 
     @Transactional
@@ -94,14 +93,5 @@ public class UserService {
             throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
         }
     }
-
-    public User checkBUSINESS(UserDetailsImpl userDetails){
-       User user= userDetails.getUser();
-        if(!user.getRole().equals(BUSINESS)){
-            throw  new UserException(UserErrorCode.NOT_HAVE_PERMISSION);
-        }
-        return user;
-    }
-
 
 }

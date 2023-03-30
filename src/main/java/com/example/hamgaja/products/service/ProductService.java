@@ -144,8 +144,6 @@ public class ProductService {
             throw new UserException(UserErrorCode.NOT_AUTHOR);
 
         }else{
-            System.out.println(productId);
-            System.out.println(product.getId());
             List<Room> roomImageUrl= roomRepository.findByRoomImageUrl(productId);//파일 URL찾기
             //s3ImageRepository.deleteAllByUploadFileUrl(roomImageUrl);
             roomRepository.deleteAllByProductId(productId);
