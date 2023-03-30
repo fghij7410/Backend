@@ -40,8 +40,6 @@ public class S3UploaderService {
 
         List<S3RequestDto> s3files = new ArrayList<>();
 
-        String uploadFilePath = productType + "/" + getFolderName();
-
         for (MultipartFile multipartFile : multipartFiles) {
 
             String originalFileName = multipartFile.getOriginalFilename();
@@ -54,7 +52,7 @@ public class S3UploaderService {
 
             try (InputStream inputStream = multipartFile.getInputStream()) {
 
-                String keyName = uploadFilePath + "/" + uploadFileName; // ex) 구분/년/월/일/파일.확장자
+                String keyName = productType + uploadFileName; // ex) 구분/년/월/일/파일.확장자
 
                 // S3에 폴더 및 파일 업로드
                 amazonS3Client.putObject(
@@ -74,7 +72,7 @@ public class S3UploaderService {
                     S3RequestDto.builder()
                             .originalFileName(originalFileName)
                             .uploadFileName(uploadFileName)
-                            .uploadFilePath(uploadFilePath)
+                            .uploadFilePath(productType)
                             .uploadFileUrl(uploadFileUrl)
                             .build());
         }
@@ -138,10 +136,10 @@ public class S3UploaderService {
     /**
      * 년/월/일 폴더명 반환
      */
-    private String getFolderName() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Date date = new Date();
-        String str = sdf.format(date);
-        return str.replace("-", "/");
-    }
+//    private String getFolderName() {
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+//        Date date = new Date();
+//        String str = sdf.format(date);
+//        return str.replace("-", "/");
+//    }
 }

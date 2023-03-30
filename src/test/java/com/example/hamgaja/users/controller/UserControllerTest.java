@@ -34,11 +34,11 @@ class UserControllerTest {
     @DisplayName("회원 가입 성공")
     @Test
     void signUpSuccess() throws Exception {
-        SignupRequestDto signUpRequestDto = SignupRequestDto.builder()
-                    .email("test@test")
-                    .username("장한진")
-                    .password("1234qwer")
-                    .build();
+//        SignupRequestDto signUpRequestDto = SignupRequestDto.builder()
+//                    .email("test@test")
+//                    .username("장한진")
+//                    .password("1234qwer")
+//                    .build();
         }
         // given
 
