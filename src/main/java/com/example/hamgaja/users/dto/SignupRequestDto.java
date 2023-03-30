@@ -1,6 +1,5 @@
 package com.example.hamgaja.users.dto;
 
-import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.Email;
