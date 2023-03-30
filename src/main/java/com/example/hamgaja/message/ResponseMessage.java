@@ -1,5 +1,6 @@
 package com.example.hamgaja.message;
 
+import com.example.hamgaja.products.exception.ProductErrorCode;
 import com.example.hamgaja.reservations.exception.ReservationErrorCode;
 import com.example.hamgaja.users.exception.UserErrorCode;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,17 @@ public class ResponseMessage {
     }
 
     public static ResponseEntity ErrorResponse(ReservationErrorCode errorCode) {
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(ResponseMessage.builder()
+                        .statusCode(errorCode.getHttpStatus().value())
+                        .message(errorCode.getMessage())
+                        .data("")
+                        .build()
+                );
+    }
+
+    public static ResponseEntity ErrorResponse(ProductErrorCode errorCode) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
                 .body(ResponseMessage.builder()
