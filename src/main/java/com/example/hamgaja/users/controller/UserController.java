@@ -10,6 +10,7 @@ import com.example.hamgaja.users.exception.UserException;
 import com.example.hamgaja.message.ResponseMessage;
 import com.example.hamgaja.users.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
-
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -31,6 +32,9 @@ public class UserController {
     @PostMapping("/users/signup/user")
     public ResponseEntity signupUser(@Valid @RequestBody SignupRequestDto signupRequestDto, TermsRequestDto termsRequestDto,
                                  BindingResult bindingResult) {
+        log.info("email={}", signupRequestDto.getEmail());
+        log.info("username={}", signupRequestDto.getUsername());
+        log.info("password={}", signupRequestDto.getPassword());
         if (bindingResult.hasErrors()) {
             throw new UserException(UserErrorCode.NOT_PROPER_INPUTFORM);
         }
