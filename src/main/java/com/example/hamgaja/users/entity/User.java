@@ -1,6 +1,5 @@
 package com.example.hamgaja.users.entity;
 
-import com.example.hamgaja.products.entity.Product;
 import com.example.hamgaja.users.dto.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
