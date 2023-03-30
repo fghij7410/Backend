@@ -21,8 +21,9 @@ public class ProductResponseDto {
     private String ownerComment;
     private String imageUrl;
     private Map<String, Boolean> category;
+    private Long minRoomPrice;
 
-    public ProductResponseDto(Product product, Map<String, Boolean> category) {
+    public ProductResponseDto(Product product, Map<String, Boolean> category, Long minRoomPrice) {
         this.id = product.getId();
         this.name = product.getName();
         this.star = product.getStar();
@@ -32,5 +33,6 @@ public class ProductResponseDto {
         this.productType = product.getProductType();
         this.ownerComment = product.getOwnerComment();
         this.category = category;
+        this.minRoomPrice = minRoomPrice;
     }
 }

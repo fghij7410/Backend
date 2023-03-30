@@ -72,7 +72,7 @@ public class ProductService {
         for (Map.Entry<String, Boolean> next : entries) {
             if (next.getValue()) {
                 Category category = categoryRepository.findByName(next.getKey())
-                        .orElseThrow(()->new ProductException(ProductErrorCode.NOT_PROPER_CATEGORY));
+                        .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_PROPER_CATEGORY));
                 productCategories.add(new ProductCategory(product, category));
             }
         }
@@ -85,19 +85,29 @@ public class ProductService {
         }
 
         roomRepository.saveAll(roomList);
-        return new ProductResponseDto(product, categoryMap);
+        Long minPrice = roomList.stream().mapToLong(Room::getRoomPrice).min().orElse(0L);
+        return new ProductResponseDto(product, categoryMap, minPrice);
     }
 
     //프로덕트 전체 조회
     @Transactional(readOnly = true)
     public List<ProductResponseDto> getAllProduct() {
         List<Product> products = productRepository.findAll();
-        List<Category> categories = categoryRepository.findAll();
-        Map<String, Boolean> category = categories.stream()
-                .collect(Collectors.toMap(Category::getName, s-> Boolean.FALSE));
         List<ProductResponseDto> result = new ArrayList<>();
+        List<Category> categories = categoryRepository.findAll();
         for (Product product : products) {
-            result.add(new ProductResponseDto(product, category));
+            // 숙소에 해당하는 카테고리들을 리스트로 받기
+            List<Category> productCategories = productCategoryRepository.findAllByProductId(product.getId())
+                    .stream().map(ProductCategory::getCategory).toList();
+
+            // 숙소의 카테고리와 비즈니스에서 관리하는 카테고리를 매칭해서 숙소 카테고리가 포함하고 있으면 True, 아니면 False
+            Map<String, Boolean> category = categories.stream()
+                    .collect(Collectors.toMap(Category::getName,
+                            s -> productCategories.contains(s) ? Boolean.TRUE :Boolean.FALSE));
+
+            // 숙소의 객실 리스트의 stream 이용하여 min 반환
+            Long minPrice = product.getRooms().stream().mapToLong(Room::getRoomPrice).min().orElse(0L);
+            result.add(new ProductResponseDto(product, category, minPrice));
         }
         return result;
     }

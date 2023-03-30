@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -47,6 +48,9 @@ public class Product {
 
     @Column(nullable = false)
     private String imageUrl;
+
+    @OneToMany(mappedBy = "product")
+    private List<Room> rooms;
 
     public void update(ProductRequestDto productRequestDto) {
         this.name = productRequestDto.getName();
