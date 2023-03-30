@@ -8,7 +8,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Getter
-@Builder
 public class SignupRequestDto {
     @NotBlank
     @Email(message = "이메일 형식이 올바르지 않습니다.")
@@ -19,9 +18,9 @@ public class SignupRequestDto {
     @Pattern(regexp = "^[a-zA-Z0-9][a-zA-Z0-9]{7,14}$",
     message = "비밀번호 형식이 올바르지 않습니다.")
     private String password;
+
     @Pattern(regexp = "^[가-힣a-zA-Z0-9]{2,6}$",
     message = "닉네임 형식이 올바르지 않습니다.")
     private String username;
-
 
 }
